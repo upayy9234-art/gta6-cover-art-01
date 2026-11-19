@@ -6,7 +6,7 @@
    stands in for /output; with neither set, /output is used.
    Running it twice over the same repository writes identical bytes. */
 
-import { cpSync, existsSync, mkdirSync, rmSync, writeFileSync } from 'node:fs';
+import { cpSync, existsSync, mkdirSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { buildDossier } from './vendor/makefun-app.ts';
@@ -36,9 +36,13 @@ function mirrorTree(sourceDir: string, targetDir: string): void {
 
 function handIn(): void {
   /* Start from an empty output directory so stale files from an
-     earlier run can never leak into this entry. */
-  rmSync(outputDir, { recursive: true, force: true });
+     earlier run can never leak into this entry. Clear only the
+     contents, never the directory itself: in the grader /output is
+     a mount point and removing it fails with EBUSY. */
   mkdirSync(outputDir, { recursive: true });
+  for (const entry of readdirSync(outputDir)) {
+    rmSync(join(outputDir, entry), { recursive: true, force: true });
+  }
   mirrorTree(join(repoRoot, 'app'), join(outputDir, 'app'));
   mirrorTree(join(repoRoot, 'screenshots'), join(outputDir, 'screenshots'));
   const dossier = buildDossier(outputDir, dossierCaps);
