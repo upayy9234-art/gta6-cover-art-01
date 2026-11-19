@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Leonida Cover Studio - GTA-style cover art maker</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <h1>Leonida Cover Studio</h1>
+    <p>Turn a photo and a caption into GTA-style cover art: multi-panel poster, bold lettering, Vice City sunset or neon grade. Export a PNG to share.</p>
+  </div>
+  <div class="top-actions">
+    <label class="upload-btn" for="photo-input">Load photos</label>
+    <input type="file" id="photo-input" accept="image/*" multiple hidden>
+    <button id="export-png" type="button" class="export-btn">Export PNG</button>
+  </div>
+</header>
+
+<main class="layout">
+  <section class="controls" aria-label="Cover controls">
+    <div class="panel-group">
+      <h2>Photos</h2>
+      <p class="hint">Your photos stay on your machine. Load one or several, then drag each panel to position it.</p>
+      <div class="button-row">
+        <button type="button" data-sample="pier">Sample: Pier</button>
+        <button type="button" data-sample="boulevard">Sample: Boulevard</button>
+      </div>
+      <h3>Active panel</h3>
+      <div class="button-row" role="group" aria-label="Active panel">
+        <button type="button" data-panel="0" class="active">Panel 1</button>
+        <button type="button" data-panel="1">Panel 2</button>
+        <button type="button" data-panel="2">Panel 3</button>
+      </div>
+      <label class="slider-label" for="zoom">Zoom <span id="zoom-value">1.00x</span></label>
+      <input type="range" id="zoom" min="1" max="4" step="0.05" value="1">
+      <label class="slider-label" for="pan-x">Pan left / right</label>
+      <input type="range" id="pan-x" min="-0.6" max="0.6" step="0.01" value="0">
+      <label class="slider-label" for="pan-y">Pan up / down</label>
+      <input type="range" id="pan-y" min="-0.6" max="0.6" step="0.01" value="0">
+      <button type="button" id="reset-panel">Reset panel position</button>
+    </div>
+
+    <div class="panel-group">
+      <h2>Layout</h2>
+      <div class="button-row">
+        <button type="button" data-layout="poster" class="active">Poster</button>
+        <button type="button" data-layout="triptych">Triptych</button>
+        <button type="button" data-layout="duo">Duo</button>
+      </div>
+      <p class="hint">Poster: one hero panel plus two small ones. Triptych: three tall panels. Duo: two panels side by side.</p>
+    </div>
+
+    <div class="panel-group">
+      <h2>Caption</h2>
+      <label class="slider-label" for="caption">Caption text</label>
+      <input type="text" id="caption" value="Sunset Heist" maxlength="60">
+      <label class="slider-label" for="caption-size">Lettering size</label>
+      <input type="range" id="caption-size" min="0.6" max="1.5" step="0.05" value="1">
+      <h3>Lettering colour</h3>
+      <div class="swatches" role="group" aria-label="Caption colour">
+        <button type="button" data-color="#ffffff" class="swatch active" style="background:#ffffff" aria-label="White"></button>
+        <button type="button" data-color="#ffd23f" class="swatch" style="background:#ffd23f" aria-label="Gold"></button>
+        <button type="button" data-color="#ff5da2" class="swatch" style="background:#ff5da2" aria-label="Pink"></button>
+        <button type="button" data-color="#39d5ff" class="swatch" style="background:#39d5ff" aria-label="Cyan"></button>
+        <button type="button" data-color="#ff7a3c" class="swatch" style="background:#ff7a3c" aria-label="Orange"></button>
+      </div>
+    </div>
+
+    <div class="panel-group">
+      <h2>Grade &amp; size</h2>
+      <div class="button-row">
+        <button type="button" data-grade="sunset" class="active">Sunset</button>
+        <button type="button" data-grade="neon">Neon</button>
+        <button type="button" data-grade="noir">Noir</button>
+      </div>
+      <label class="slider-label" for="export-size">Export size</label>
+      <select id="export-size">
+        <option value="1920x1080" selected>Landscape 1920 x 1080</option>
+        <option value="1080x1080">Square 1080 x 1080</option>
+        <option value="1080x1350">Portrait 1080 x 1350</option>
+      </select>
+      <p class="hint">Export writes a PNG at the size above. Original art only: no game logos, artwork or fonts are used here.</p>
+    </div>
+  </section>
+
+  <section class="preview" aria-label="Cover preview">
+    <canvas id="stage" width="1920" height="1080"></canvas>
+    <p id="status" class="status" role="status">Ready.</p>
+  </section>
+</main>
+
+<footer class="footnote">
+  <p>Leonida Cover Studio is an original fan-style tool. It is not affiliated with Rockstar Games and uses no Rockstar logos, artwork or fonts. Photos are read on your machine and never uploaded.</p>
+</footer>
+
+<script src="src/cover.js"></script>
+<script src="src/main.js"></script>
+<script src="src/shots.js"></script>
+</body>
+</html>
